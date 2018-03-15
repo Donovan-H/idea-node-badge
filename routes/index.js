@@ -3,12 +3,16 @@ const uuidv4 = require('uuid');
 
 const router = express.Router();
 
+
 router.get('/', function(req, res) {
     req.session.state = uuidv4();
     console.log(req.session.state);
 
     if (req.session.access_token) {
-        return res.send("LOGGED IN");
+        res.sendFile('/app/index.html', {'root': './'})
+        router.use(express.static('./app'))
+        
+        return res.status(200);
     } else {
         console.log('Sending to iDEA - not logged in.');
         return res.redirect(generateURL(req.session.state));
