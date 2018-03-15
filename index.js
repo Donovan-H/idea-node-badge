@@ -8,7 +8,10 @@ const app = new express;
 const index = require('./routes')
 const callback = require('./routes/callback')
 const logout = require('./routes/logout')
-const idea = require('./routes/idea');
+
+const api = require('./routes/api')
+const api_user = require('./routes/api/user');
+const api_progress = require('./routes/api/progress');
 
 app.listen(process.env.PORT, () => console.log('listening on ', process.env.PORT));
 
@@ -22,36 +25,6 @@ app.use('/', index);
 app.use('/callback', callback);
 app.use('/logout', logout);
 
-app.get('/api/progress', function (req, res) {
-  let token = req.session.access_token;
-  if(req.session.access_token) {
-    
-    console.log('Requesting iDEA API...')
-
-    idea.getUser(req.session.access_token, (response, body) => {
-
-      if (response.statusCode === 401) {
-        console.log('Got 401 response from the iDEA API with content:');
-        console.log(body);
-        // Redirect to login endpoint in case access token
-        // is rejected.
-        return res.status(401).json({error: "Unauthorized request."});
-      }
-
-      if (response.statusCode === 404) {
-        console.log('Got 404 response from the iDEA API.');        
-        return res.status(404).json({error: "Endpoint not found."});
-      }
-
-      console.log(body);
-    
-      res.json(body);
-    });
-    
-
-  } else {
-    console.log('Unauthorized request.')
-    res.status(401).json({error: "Unauthorized request."})
-  }
-})
+app.use('/api/user', api, api_user);
+app.use('/api/progress', api, api_user);
 
