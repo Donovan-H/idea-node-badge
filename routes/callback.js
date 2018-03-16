@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+const jwt = require('jsonwebtoken');
 
 router.use(function (req, res, next) {
     console.log(req.session.state);
@@ -11,9 +12,16 @@ router.use(function (req, res, next) {
 router.use(function (req, res, next) {
     const { callbackError, code, state } = req.query;
     
-    if (callbackError || !code || req.session.state != state) {
-      console.log('callback error');
+    if (callbackError || !code) {
+      console.log('Sending to iDEA - Callback issue.');
       return res.redirect('https://idea.org.uk');
+    }
+
+    if (req.session.state != state) {
+      console.log('Invalid session state, returning to iDEA.');
+      req.session.destroy(() => {
+        return res.redirect(process.env.IDEA_URL);
+      });
     }
 
     next()

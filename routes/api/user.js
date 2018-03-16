@@ -8,22 +8,22 @@ router.get('/', function (req, res) {
 
     idea.getUser(req.session.access_token, (response, body) => {
 
-    if (response.statusCode === 401) {
-        console.log('Got 401 response from the iDEA API with content:');
+        if (response.statusCode === 401) {
+            console.log('Got 401 response from the iDEA API with content:');
+            console.log(body);
+            // Redirect to login endpoint in case access token
+            // is rejected.
+            return res.status(401).json({error: "Unauthorized request."});
+        }
+
+        if (response.statusCode === 404) {
+            console.log('Got 404 response from the iDEA API.');        
+            return res.status(404).json({error: "Endpoint not found."});
+        }
+
         console.log(body);
-        // Redirect to login endpoint in case access token
-        // is rejected.
-        return res.status(401).json({error: "Unauthorized request."});
-    }
-
-    if (response.statusCode === 404) {
-        console.log('Got 404 response from the iDEA API.');        
-        return res.status(404).json({error: "Endpoint not found."});
-    }
-
-    console.log(body);
-    
-    res.json(body);
+        
+        res.json(body);
     });
 })
 

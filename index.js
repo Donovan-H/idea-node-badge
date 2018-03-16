@@ -26,5 +26,5 @@ app.use('/callback', callback);
 app.use('/logout', logout);
 
 app.use('/api/user', api, api_user);
-app.use('/api/progress', api, api_user);
+app.use('/api/progress', api, api_progress);
 
