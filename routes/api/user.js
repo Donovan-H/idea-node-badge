@@ -21,9 +21,14 @@ router.get('/', function (req, res) {
             return res.status(404).json({error: "Endpoint not found."});
         }
 
+        if(!body) {
+            console.log('Empty response from the iDEA API.');        
+            return res.status(404).json({error: "No data received."});
+        }
+
         console.log(body);
         
-        res.json(body);
+        return res.json(body);
     });
 })
 

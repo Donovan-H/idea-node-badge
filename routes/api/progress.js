@@ -24,13 +24,7 @@ router.post('/', function (req, res) {
             console.log('Got 404 response from the iDEA API.');        
             return res.status(404).json({error: "Endpoint not found."});
         }
-
-        if(!body) {
-            console.log('Empty response from the iDEA API.');        
-            return res.status(404).json({error: "No data received."});
-        }
-
-        console.log(body);
+        
         return res.json({status: "success"});   
     }); 
 })
