@@ -51,3 +51,7 @@ module.exports.getUser = (access_token, callback) => {
 module.exports.postProgress = (access_token, data, callback) => {
     ideaPost('progress', access_token, data, callback);
 }
+
+module.exports.postResult = (access_token, result, callback) => {
+    ideaPost('result', access_token, result, callback);
+}
