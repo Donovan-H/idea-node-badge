@@ -1,13 +1,11 @@
 const request = require('request');
 
-const ideaURL = 'https://idea.org.uk/api/'
-
-var ideaRequest = (context, access_token, callback) => {
+var ideaGet = (context, access_token, callback) => {
     if(!access_token) return 0;
     console.log('We have a token!');
 
     var options = {
-        url: ideaURL + context,
+        url: process.env.API_URL + context,
         headers: {
             'Authorization': 'Bearer ' + access_token 
         },
@@ -23,6 +21,33 @@ var ideaRequest = (context, access_token, callback) => {
     });
 }
 
+var ideaPost = (context, access_token, data, callback) => {
+    if(!access_token) return 0;
+    console.log('We have a token!');
+
+    var options = {
+        method: 'POST',
+        url: process.env.API_URL + context,
+        headers: {
+            'Authorization': 'Bearer ' + access_token 
+        },
+        body: data,
+        json: true
+    };
+
+    request(options, (err, res, body) => {
+        if(!err && res.statusCode === 200) {
+            callback(res, body);
+        } else {
+            callback(res, null);
+        }
+    });
+}
+
 module.exports.getUser = (access_token, callback) => {
-    ideaRequest('user', access_token, callback);    
+    ideaGet('user', access_token, callback);    
+}
+
+module.exports.postProgress = (access_token, data, callback) => {
+    ideaPost('progress', access_token, data, callback);
 }

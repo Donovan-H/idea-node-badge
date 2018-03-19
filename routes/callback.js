@@ -22,6 +22,7 @@ router.use(function (req, res, next) {
       req.session.destroy(() => {
         return res.redirect(process.env.IDEA_URL);
       });
+      return res.redirect(process.env.IDEA_URL);
     }
 
     next()

@@ -21,6 +21,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(express.json());
+
 app.use('/', index);
 app.use('/callback', callback);
 app.use('/logout', logout);
