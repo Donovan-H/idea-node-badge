@@ -31,9 +31,8 @@ router.post('/', function (req, res) {
         }
 
         console.log(body);
-    });
-
-    return res.json({status: "success"});    
+        return res.json({status: "success"});   
+    }); 
 })
 
 module.exports = router;
