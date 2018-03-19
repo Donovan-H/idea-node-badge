@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/', function(req, res) {
     let token = crypto.randomBytes(64).toString('hex');;
     req.session.state = token;
-    console.log(req.session.state);
+    console.log('Session State:'+req.session.state);
 
     if (req.session.access_token) {
         res.sendFile('/app/index.html', {'root': './'})
@@ -16,6 +16,7 @@ router.get('/', function(req, res) {
         return res.status(200);
     } else {
         console.log('Sending to Auth0 - not logged in.');
+        console.log('URL: '+generateURL(req.session.state))
         return res.redirect(generateURL(req.session.state));
     }
 });

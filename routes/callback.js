@@ -10,18 +10,16 @@ router.use(function (req, res, next) {
 });
 
 router.use(function (req, res, next) {
-    const { callbackError, code, state } = req.query;
+    const { error, code, state } = req.query;
     
-    if (callbackError || !code) {
-      console.log('Sending to iDEA - Callback issue.');
+    if (error || !code) {
+      console.log('Sending to iDEA - Callback issue:' + error);
       return res.redirect('https://idea.org.uk');
     }
 
     if (req.session.state != state) {
       console.log('Invalid session state, returning to iDEA.');
-      req.session.destroy(() => {
-        return res.redirect(process.env.IDEA_URL);
-      });
+      req.session.destroy();
       return res.redirect(process.env.IDEA_URL);
     }
 
