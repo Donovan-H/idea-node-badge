@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .error {
+            background-color: rgba(193, 66, 66, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="clearData">Clear</button>
+        <button @click="getUser">Get User</button>
+        <button @click="postResult(true)">Post Pass</button>
+        <button @click="postResult(false)">Post Fail</button>
+        <pre :class="{error}">{{ responseData }}</pre>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    responseData: 'None',
+    error: false
+  },
+  methods: {
+      clearData() {
+          this.responseData = 'None'
+          this.error = false
+      },
+
+      getUser() {
+        this.$http.get('/api/user').then(response => {
+            
+            console.log(response.body);
+            this.responseData = response.body;
+            this.error = false
+
+        }, response => {
+            console.log('Error: '+response.body);  
+            this.responseData = response.body;
+            this.error = true
+        });
+      },
+
+      postResult(result) {
+          if (result) {
+              result = 'pass'
+          } else {
+              result = 'fail'
+          }
+        this.$http.post('/api/result', {result}).then(response => {
+
+            // get status
+            response.status;
+
+            // get status text
+            response.statusText;
+
+            // get 'Expires' header
+            response.headers.get('Expires');
+
+            // get body data
+            this.responseData = response.body;
+
+            this.error = false
+
+        }, response => {
+            this.error = true
+            this.responseData = response.body;
+        });
+      }
+  }
+})
+</script>
+</body>
+</html>
