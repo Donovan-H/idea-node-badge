@@ -15,7 +15,7 @@ router.get('/', function(req, res) {
         
         return res.status(200);
     } else {
-        console.log('Sending to Auth0 - not logged in.');
+        console.log('Sending to iDEA - not logged in.');
         console.log('URL: '+generateURL(req.session.state))
         return res.redirect(generateURL(req.session.state));
     }

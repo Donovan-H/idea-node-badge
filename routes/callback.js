@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const request = require('request');
 const jwt = require('jsonwebtoken');
+if (process.env.APP_ENV === 'development') {
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0  
+}
 
 router.use(function (req, res, next) {
     console.log(req.session.state);
@@ -14,7 +17,7 @@ router.use(function (req, res, next) {
     
     if (error || !code) {
       console.log('Sending to iDEA - Callback issue:' + error);
-      return res.redirect('https://idea.org.uk');
+      return res.redirect('https://idea.dev');
     }
 
     if (req.session.state != state) {
@@ -31,7 +34,7 @@ router.get('/', function(req, res) {
     console.log('main boss')
     const options = {
       method: 'POST',
-      url: `${process.env.AUTH_URL}/oauth/token`,
+      url: `${process.env.AUTH_URL}/token`,
       headers: { 'content-type': 'application/json' },
       body: {
         grant_type: 'authorization_code',

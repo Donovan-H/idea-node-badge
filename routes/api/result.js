@@ -13,20 +13,14 @@ router.post('/', (req, res) => {
 
     idea.postResult(req.session.access_token, req.body, (response, body) => {
 
-        if (response.statusCode === 401) {
-            console.log('Got 401 response from the iDEA API with content:');
-            console.log(body);
-            return res.status(401).json({error: "Unauthorized request."});
-        }
-
-        if (response.statusCode === 404) {
-            console.log('Got 404 response from the iDEA API.');        
-            return res.status(404).json({error: "Endpoint not found."});
+        if (response.statusCode >= 400) {
+            console.log(`Got a ${response.statusCode} response from the iDEA API: ${response.body.error}`)
+            return res.status(response.statusCode).json({error: "Error occured.", error: response.body.error});
         }
 
         console.log(body);
         
-        return res.json({status: "success", data: body});   
+        return res.json({response: response.statusCode, status: "success", data: body});   
     }); 
 })
 
